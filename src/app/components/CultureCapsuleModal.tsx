@@ -13,6 +13,7 @@ import {
   Coffee, 
   Mic, 
   Play, 
+  Square,
   UploadCloud, 
   PenTool, 
   User, 
@@ -35,7 +36,15 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
   const [localVoiceNotes, setLocalVoiceNotes] = useState(capsule.voiceNotes);
   const [isRecording, setIsRecording] = useState(false);
   const [transcriptionText, setTranscriptionText] = useState("");
+  const [playingId, setPlayingId] = useState<string | null>(null);
   const recognitionRef = useRef<any>(null);
+
+  // Stop speech on unmount
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
 
   // Reset perspective and notes when tab changes or capsule changes
   useEffect(() => {
@@ -45,7 +54,30 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
       recognitionRef.current.stop();
       setIsRecording(false);
     }
+    window.speechSynthesis.cancel();
+    setPlayingId(null);
   }, [capsule.id, activeTab]);
+
+  const handlePlayVoiceNote = (id: string, text: string) => {
+    if (playingId === id) {
+      window.speechSynthesis.cancel();
+      setPlayingId(null);
+      return;
+    }
+    
+    window.speechSynthesis.cancel();
+    
+    if (!text) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.95; // slightly slower for better immersion
+    
+    utterance.onend = () => setPlayingId(null);
+    utterance.onerror = () => setPlayingId(null);
+
+    setPlayingId(id);
+    window.speechSynthesis.speak(utterance);
+  };
 
   const toggleRecording = () => {
     if (isRecording) {
@@ -282,8 +314,19 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
                             <h4 className="font-bold text-white">{vn.author}</h4>
                             <p className="text-xs text-amber-200/60">{vn.date}</p>
                           </div>
-                          <button className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center hover:bg-amber-400 transition-colors">
-                            <Play className="w-5 h-5 text-black ml-1" />
+                          <button 
+                            onClick={() => handlePlayVoiceNote(vn.id, vn.transcription)}
+                            className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                              playingId === vn.id 
+                              ? 'bg-amber-600 text-white shadow-[0_0_15px_rgba(217,119,6,0.5)]' 
+                              : 'bg-amber-500 hover:bg-amber-400 text-black'
+                            }`}
+                          >
+                            {playingId === vn.id ? (
+                              <Square className="w-4 h-4 fill-current" />
+                            ) : (
+                              <Play className="w-5 h-5 ml-1 fill-current" />
+                            )}
                           </button>
                         </div>
                         
@@ -292,9 +335,10 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
                           {Array.from({ length: 40 }).map((_, i) => (
                             <div 
                               key={i} 
-                              className={`flex-1 rounded-sm bg-amber-400 ${i < 15 ? 'opacity-100' : 'opacity-30'}`}
+                              className={`flex-1 rounded-sm ${playingId === vn.id ? 'bg-amber-300 animate-pulse' : 'bg-amber-400'} ${i < 15 ? 'opacity-100' : 'opacity-30'}`}
                               style={{ 
-                                height: `${Math.max(10, Math.sin(i * 0.5) * 50 + 50)}%` 
+                                height: `${Math.max(10, Math.sin(i * 0.5) * 50 + 50)}%`,
+                                animationDelay: `${i * 0.05}s`
                               }}
                             />
                           ))}
