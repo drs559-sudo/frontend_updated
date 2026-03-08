@@ -244,13 +244,37 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
                   </div>
                 </div>
                 
-                <div className="bg-slate-800/50 p-6 rounded-2xl border border-amber-600/20 relative">
+                <div className="bg-slate-800/50 p-6 rounded-2xl border border-amber-600/20 relative group">
                   {/* Badge for AI Synthesis if it's the general history */}
                   {activePerspectiveIndex === 0 && (
                     <div className="absolute -top-3 left-6 bg-indigo-500/20 text-indigo-300 text-[10px] font-bold px-2 py-1 rounded border border-indigo-500/30 uppercase tracking-widest flex items-center gap-1">
                       <Sparkles className="w-3 h-3" /> AI Synthesized
                     </div>
                   )}
+                  
+                  {/* TTS Audio Controls */}
+                  <div className="absolute top-4 right-4 flex items-center">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // use a deterministic id for this TTS source
+                        handlePlayVoiceNote(`history-tts-${activePerspectiveIndex}`, capsule.perspectives[activePerspectiveIndex].summary);
+                      }}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                        playingId === `history-tts-${activePerspectiveIndex}`
+                        ? 'bg-amber-600 text-white shadow-[0_0_10px_rgba(217,119,6,0.5)]' 
+                        : 'bg-slate-700/50 hover:bg-amber-500/20 text-amber-500/70 hover:text-amber-400 opacity-50 group-hover:opacity-100'
+                      }`}
+                      title={playingId === `history-tts-${activePerspectiveIndex}` ? "Stop playback" : "Read aloud"}
+                    >
+                      {playingId === `history-tts-${activePerspectiveIndex}` ? (
+                        <Square className="w-3 h-3 fill-current" />
+                      ) : (
+                        <Play className="w-4 h-4 ml-0.5 fill-current" />
+                      )}
+                    </button>
+                  </div>
+
                   <p className="text-slate-300 leading-relaxed text-[15px] animate-in fade-in zoom-in duration-300" key={activePerspectiveIndex}>
                     {capsule.perspectives[activePerspectiveIndex].summary}
                   </p>

@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import Globe from 'react-globe.gl';
 import { MapPin, Search, ZoomIn, ZoomOut, RotateCw, Hand, Sparkles } from 'lucide-react';
 import { cultureCapsules } from '../data/cultureCapsules';
+import { countryLabels } from '../data/countries';
 import { CultureCapsule } from '../models/cultureCapsule';
 import { CultureCapsuleModal } from './CultureCapsuleModal';
 
@@ -228,7 +229,14 @@ export function Globe3D({ onLocationSelect, selectedLocations = [] }: Globe3DPro
               globeRef.current.pointOfView({ lat: d.lat, lng: d.lng, altitude: 0.6 }, 1000);
             }
           }}
-
+          labelsData={countryLabels}
+          labelLat={(d: any) => d.lat}
+          labelLng={(d: any) => d.lng}
+          labelText={(d: any) => d.name}
+          labelSize={1.2}
+          labelDotRadius={0.4}
+          labelColor={() => 'rgba(255, 255, 255, 0.7)'}
+          labelResolution={2}
         />
 
         {/* Top-Right Tools Menu */}

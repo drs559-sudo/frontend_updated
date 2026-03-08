@@ -981,5 +981,123 @@ export const cultureCapsules: CultureCapsule[] = [
         answeredBy: "Nana",
       },
     ],
+  },
+  {
+    id: "durham-uk",
+    name: "Durham",
+    country: "United Kingdom",
+    lat: 54.7753,
+    lng: -1.5849,
+    timelinePeriod: "Norman Era to Modern (11th Century - Present)",
+    capsuleColor: "#7B2CBF",
+    perspectives: [
+      {
+        role: "General History",
+        summary: "Durham is famous for its towering Norman Cathedral and Castle, both UNESCO World Heritage Sites. For centuries, the Prince Bishops of Durham ruled with near-royal authority.",
+      },
+      {
+        role: "Student",
+        summary: "With the steep cobbled streets and the cathedral looming everywhere you look, studying here genuinely feels like you're attending Hogwarts.",
+      }
+    ],
+    lifeTodayCards: [
+      {
+        category: "Collegiate System",
+        title: "College Rivalries",
+        content: "Durham University operates on a collegiate system similar to Oxford and Cambridge. Every student belongs to a college, fostering intense loyalties and friendly sports rivalries.",
+      },
+      {
+        category: "Pacing",
+        title: "The Wear Walk",
+        content: "Walking along the River Wear that loops around the city center peninsula is a daily ritual for locals, surrounded by ancient woods and medieval bridges.",
+      }
+    ],
+    images: ["https://images.unsplash.com/photo-1594988775213-33e1eb32ac64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxEdXJoYW0lMjBDYXRoZWRyYWx8ZW58MHx8fHwxNzcyODk1MjUzfDA&ixlib=rb-4.1.0&q=80&w=1080"],
+    stories: [
+      {
+        id: "durham-1",
+        author: "Sophie",
+        date: "October 14, 2026",
+        text: "Matriculation day in the Cathedral is a core memory. The sheer scale of the Norman pillars makes you realize how insignificant modern problems are.",
+      },
+    ],
+    voiceNotes: [
+      {
+        id: "vn-durham",
+        author: "Nigel",
+        date: "April 2, 2026",
+        transcription: "Avoid Saddler Street on a Saturday if you are in a rush. The cobbles, the tourists, and the students make it an absolute bottleneck.",
+        duration: "0:10",
+        audioUrl: "",
+      },
+    ],
+    questions: [
+      {
+        id: "q-durham",
+        author: "Carlos",
+        question: "Is the castle actually used as student accommodation?",
+        answer: "Yes! Students belonging to University College actually live in the 11th-century castle. It's the oldest student residence in the world.",
+        answeredBy: "Eleanor",
+      },
+    ],
+  },
+  {
+    id: "york-uk",
+    name: "York",
+    country: "United Kingdom",
+    lat: 53.9590,
+    lng: -1.0815,
+    timelinePeriod: "Roman Eboracum to Modern (71 AD - Present)",
+    capsuleColor: "#E07A5F",
+    perspectives: [
+      {
+        role: "General History",
+        summary: "Founded as Eboracum by the Romans, heavily fought over by the Vikings (Jorvik), and dominated by the spectacular York Minster. It is arguably the most perfectly preserved medieval city in England.",
+      },
+      {
+        role: "Historian",
+        summary: "You cannot dig a hole here without hitting Roman masonry, a Viking bone comb, or a medieval coin. The city is a colossal layer cake of British history.",
+      }
+    ],
+    lifeTodayCards: [
+      {
+        category: "Shopping",
+        title: "The Shambles",
+        content: "The Shambles is a narrow, medieval street with overhanging timber-framed buildings. It famously inspired Diagon Alley in Harry Potter and is filled with quirky shops.",
+      },
+      {
+        category: "Food",
+        title: "Betty's Tea Room",
+        content: "No visit to York is complete without queuing for an opulent afternoon tea at Betty's. It's practically mandatory.",
+      }
+    ],
+    images: ["https://images.unsplash.com/photo-1549480658-293e506cd0dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxZb3JrJTIwTWluc3RlcnxlbnwwfHx8fDE3NzI4OTUyNTN8MA&ixlib=rb-4.1.0&q=80&w=1080"],
+    stories: [
+      {
+        id: "york-1",
+        author: "Harry",
+        date: "August 22, 2026",
+        text: "Walking the complete circuit of the ancient City Walls at sunset gives you the best perspective of the Minster rising above the rooftops.",
+      },
+    ],
+    voiceNotes: [
+      {
+        id: "vn-york",
+        author: "Gemma",
+        date: "December 10, 2026",
+        transcription: "The Christmas market here is spectacular, but wrap up warm. The wind whipping down the narrow streets cuts straight through you.",
+        duration: "0:12",
+        audioUrl: "",
+      },
+    ],
+    questions: [
+      {
+        id: "q-york",
+        author: "Wei",
+        question: "Is the Viking centre worth the queue?",
+        answer: "The Jorvik Viking Centre is incredible. They literally rebuilt the Viking city where they excavated it, complete with the smells of medieval fish and cabbage.",
+        answeredBy: "Thomas",
+      },
+    ],
   }
 ];
