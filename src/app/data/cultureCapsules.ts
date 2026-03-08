@@ -1012,7 +1012,7 @@ export const cultureCapsules: CultureCapsule[] = [
         content: "Walking along the River Wear that loops around the city center peninsula is a daily ritual for locals, surrounded by ancient woods and medieval bridges.",
       }
     ],
-    images: ["https://images.unsplash.com/photo-1594988775213-33e1eb32ac64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxEdXJoYW0lMjBDYXRoZWRyYWx8ZW58MHx8fHwxNzcyODk1MjUzfDA&ixlib=rb-4.1.0&q=80&w=1080"],
+    images: ["/durham-generated.png"],
     stories: [
       {
         id: "durham-1",
