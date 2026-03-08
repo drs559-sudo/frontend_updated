@@ -3,6 +3,7 @@ import Globe from 'react-globe.gl';
 import { MapPin, Search, ZoomIn, ZoomOut, RotateCw, Hand, Sparkles, Navigation } from 'lucide-react';
 import { cultureCapsules } from '../data/cultureCapsules';
 import { countryLabels } from '../data/countries';
+import { oceanLabels } from '../data/oceans';
 import { CultureCapsule } from '../models/cultureCapsule';
 import { CultureCapsuleModal } from './CultureCapsuleModal';
 
@@ -324,13 +325,13 @@ export function Globe3D({ onLocationSelect, selectedLocations = [] }: Globe3DPro
               globeRef.current.pointOfView({ lat: d.lat, lng: d.lng, altitude: 0.6 }, 1000);
             }
           }}
-          labelsData={countryLabels}
+          labelsData={[...countryLabels, ...oceanLabels]}
           labelLat={(d: any) => d.lat}
           labelLng={(d: any) => d.lng}
           labelText={(d: any) => d.name}
-          labelSize={1.2}
-          labelDotRadius={0.4}
-          labelColor={() => 'rgba(255, 255, 255, 0.7)'}
+          labelSize={(d: any) => d.isOcean ? 2.5 : 1.2}
+          labelDotRadius={(d: any) => d.isOcean ? 0 : 0.4}
+          labelColor={(d: any) => d.isOcean ? 'rgba(59, 130, 246, 0.4)' : 'rgba(255, 255, 255, 0.7)'}
           labelResolution={2}
         />
 
