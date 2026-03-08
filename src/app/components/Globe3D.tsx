@@ -4,6 +4,7 @@ import { MapPin, Search, ZoomIn, ZoomOut, RotateCw, Hand, Sparkles, Navigation }
 import { cultureCapsules } from '../data/cultureCapsules';
 import { countryLabels } from '../data/countries';
 import { oceanLabels } from '../data/oceans';
+import { capitalLabels } from '../data/capitals';
 import { CultureCapsule } from '../models/cultureCapsule';
 import { CultureCapsuleModal } from './CultureCapsuleModal';
 
@@ -303,13 +304,13 @@ export function Globe3D({ onLocationSelect, selectedLocations = [] }: Globe3DPro
           ringMaxRadius={(d: any) => Math.max(2, getInteractionVolume(d) * 1.5)}
           ringPropagationSpeed={(d: any) => Math.max(1, getInteractionVolume(d) * 0.5)}
           ringRepeatPeriod={(d: any) => Math.max(300, 1500 - getInteractionVolume(d) * 200)}
-          labelsData={[...countryLabels, ...oceanLabels]}
+          labelsData={[...countryLabels, ...oceanLabels, ...capitalLabels]}
           labelLat={(d: any) => d.lat}
           labelLng={(d: any) => d.lng}
           labelText={(d: any) => d.name}
-          labelSize={(d: any) => d.isOcean ? 2.5 : 1.2}
-          labelDotRadius={(d: any) => d.isOcean ? 0 : 0.4}
-          labelColor={(d: any) => d.isOcean ? 'rgba(59, 130, 246, 0.4)' : 'rgba(255, 255, 255, 0.7)'}
+          labelSize={(d: any) => d.isOcean ? 2.5 : d.isCapital ? 0.8 : 1.2}
+          labelDotRadius={(d: any) => d.isOcean ? 0 : d.isCapital ? 0.2 : 0.4}
+          labelColor={(d: any) => d.isOcean ? 'rgba(59, 130, 246, 0.4)' : d.isCapital ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.7)'}
           labelResolution={2}
         />
 
