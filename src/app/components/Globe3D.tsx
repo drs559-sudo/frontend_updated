@@ -349,9 +349,10 @@ export function Globe3D({ onLocationSelect, selectedLocations = [] }: Globe3DPro
           labelLng={(d: any) => d.lng}
           labelText={(d: any) => d.name}
           labelSize={(d: any) => {
-            const baseSize = d.isOcean ? 5.0 : Math.max(1.8, Math.min(3.5, (d.area || 100000) / 400000));
-            // Keep text relatively uniform on screen regardless of zoom altitude
-            const zoomMultiplier = Math.max(0.4, altitude / 1.5); 
+            const baseSize = d.isOcean ? 4.5 : Math.max(1.8, Math.min(3.5, (d.area || 100000) / 400000));
+            // By dividing by altitude, the text gets visibly smaller when you zoom out (high altitude)
+            // and enlarges beautifully when you zoom in (low altitude)
+            const zoomMultiplier = Math.max(0.4, 1.8 / altitude); 
             return baseSize * zoomMultiplier;
           }}
           labelDotRadius={(d: any) => d.isOcean ? 0 : 0.2}
