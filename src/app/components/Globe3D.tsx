@@ -83,19 +83,72 @@ export function Globe3D({ onLocationSelect, selectedLocations = [] }: Globe3DPro
     }
   }, [isRotating, globeReady]);
 
-  const handleMyLocationClick = () => {
+  const handleMyLocationClick = async () => {
     if (userLocation) {
       // Smoothly fly to the location
       if (globeRef.current) {
         globeRef.current.pointOfView({ lat: userLocation.lat, lng: userLocation.lng, altitude: 0.6 }, 1000);
       }
       
+      // Calculate distance to find if there's a nearby capsule
+      const R = 6371; // Radius of the earth in km
+      let closestCapsule = null;
+      let minDistance = Infinity;
+      
+      for (const capsule of cultureCapsules) {
+        const dLat = (capsule.lat - userLocation.lat) * Math.PI / 180;
+        const dLon = (capsule.lng - userLocation.lng) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(userLocation.lat * Math.PI / 180) * Math.cos(capsule.lat * Math.PI / 180) * 
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distance = R * c;
+        
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestCapsule = capsule;
+        }
+      }
+
+      // If within 50km, just show the existing capsule
+      if (minDistance < 50 && closestCapsule) {
+        setTimeout(() => setSelectedCapsule(closestCapsule), 600);
+        return;
+      }
+
+      let locName = "Your Exact Location";
+      let countryName = "Current Area";
+      let historySummary = "This is your current location! You serve as the historian here. By adding your unique experiences, photos, and voice notes into this capsule, you help document the lived reality of this spot for the future.";
+      
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLocation.lat}&lon=${userLocation.lng}`);
+        const data = await res.json();
+        
+        if (data && data.address) {
+          locName = data.address.city || data.address.town || data.address.village || data.address.suburb || data.address.county || "Your Exact Location";
+          countryName = data.address.country || "Current Area";
+        }
+
+        // Try to fetch Wikipedia summary for pre-existing info
+        if (locName !== "Your Exact Location" && locName !== "Your Location") {
+          const wikiRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(locName)}`);
+          if (wikiRes.ok) {
+            const wikiData = await wikiRes.json();
+            if (wikiData.extract) {
+              historySummary = wikiData.extract;
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Error fetching location data:", e);
+      }
+
       // Delay opening the modal slightly so the user sees the globe spinning to their location
       setTimeout(() => {
         const userCapsule: CultureCapsule = {
           id: "user-location",
-          name: "Your Location",
-          country: "Current Area",
+          name: locName,
+          country: countryName,
           lat: userLocation.lat,
           lng: userLocation.lng,
           timelinePeriod: "Present Day",
@@ -103,7 +156,7 @@ export function Globe3D({ onLocationSelect, selectedLocations = [] }: Globe3DPro
           perspectives: [
             {
               role: "Local Explorer",
-              summary: "This is your current location! You serve as the historian here. By adding your unique experiences, photos, and voice notes into this capsule, you help document the lived reality of this spot for the future."
+              summary: historySummary
             }
           ],
           lifeTodayCards: [
