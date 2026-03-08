@@ -24,6 +24,7 @@ export interface VoiceNote {
   transcription: string;
   duration: string;
   audioUrl: string;
+  imageUrl?: string;
 }
 
 export interface AskALocalQuestion {

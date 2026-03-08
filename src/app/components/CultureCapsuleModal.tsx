@@ -10,6 +10,7 @@ import {
   Users, 
   Sparkles, 
   Image as ImageIcon, 
+  ImagePlus,
   Coffee, 
   Mic, 
   Play, 
@@ -37,7 +38,9 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
   const [isRecording, setIsRecording] = useState(false);
   const [transcriptionText, setTranscriptionText] = useState("");
   const [playingId, setPlayingId] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const recognitionRef = useRef<any>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Stop speech on unmount
   useEffect(() => {
@@ -56,7 +59,15 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
     }
     window.speechSynthesis.cancel();
     setPlayingId(null);
+    setSelectedImage(null);
   }, [capsule.id, activeTab]);
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const fileUrl = URL.createObjectURL(e.target.files[0]);
+      setSelectedImage(fileUrl);
+    }
+  };
 
   const handlePlayVoiceNote = (id: string, text: string) => {
     if (playingId === id) {
@@ -113,7 +124,7 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
   };
 
   const handleSaveVoiceNote = () => {
-    if (transcriptionText.trim()) {
+    if (transcriptionText.trim() || selectedImage) {
       const newNote = {
         id: `vn-new-${Date.now()}`,
         author: "Guest Traveler",
@@ -121,9 +132,12 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
         transcription: transcriptionText,
         duration: "0:00",
         audioUrl: "",
+        imageUrl: selectedImage || undefined,
       };
       setLocalVoiceNotes([newNote, ...localVoiceNotes]);
       setTranscriptionText("");
+      setSelectedImage(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
 
@@ -344,9 +358,17 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
                           ))}
                         </div>
                         
-                        <p className="italic text-slate-300 text-sm">
-                          "{vn.transcription}"
-                        </p>
+                        {(vn.transcription || vn.imageUrl === undefined) && (
+                          <p className="italic text-slate-300 text-sm mb-3">
+                            "{vn.transcription}"
+                          </p>
+                        )}
+
+                        {vn.imageUrl && (
+                          <div className="mt-2 rounded-xl overflow-hidden border border-slate-700">
+                            <img src={vn.imageUrl} alt="User memory" className="w-full max-h-64 object-cover" />
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -373,7 +395,35 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
                   className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-300 text-sm focus:outline-none focus:border-amber-500 transition-colors mb-4 min-h-[80px]"
                 />
                 
+                {selectedImage && (
+                  <div className="relative mb-4 rounded-xl overflow-hidden border border-slate-700 h-32 w-32 group">
+                    <img src={selectedImage} alt="Preview" className="w-full h-full object-cover" />
+                    <button 
+                      onClick={() => { setSelectedImage(null); if (fileInputRef.current) fileInputRef.current.value = ""; }}
+                      className="absolute top-2 right-2 bg-black/50 p-1 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+                
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  capture="environment" 
+                  ref={fileInputRef} 
+                  onChange={handleImageSelect} 
+                  className="hidden" 
+                />
+
                 <div className="flex gap-3">
+                  <button 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="flex-shrink-0 flex items-center justify-center p-3 rounded-xl border bg-slate-900 border-amber-600/50 text-amber-400 hover:bg-slate-800 transition-colors"
+                  >
+                    <ImagePlus className="w-5 h-5" />
+                  </button>
+                  
                   <button 
                     onClick={toggleRecording}
                     className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border font-medium transition-colors ${
@@ -388,11 +438,11 @@ export function CultureCapsuleModal({ capsule, onClose }: CultureCapsuleModalPro
                   
                   <button 
                     onClick={handleSaveVoiceNote}
-                    disabled={!transcriptionText.trim() || isRecording}
+                    disabled={(!transcriptionText.trim() && !selectedImage) || isRecording}
                     className="flex-1 flex items-center justify-center gap-2 bg-amber-500 text-slate-900 py-3 rounded-xl font-bold hover:bg-amber-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <UploadCloud className="w-5 h-5" />
-                    Save Voice Note
+                    Save Note
                   </button>
                 </div>
               </div>
