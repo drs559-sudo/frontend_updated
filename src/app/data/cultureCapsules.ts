@@ -1066,12 +1066,12 @@ export const cultureCapsules: CultureCapsule[] = [
         content: "The Shambles is a narrow, medieval street with overhanging timber-framed buildings. It famously inspired Diagon Alley in Harry Potter and is filled with quirky shops.",
       },
       {
-        category: "Food",
-        title: "Betty's Tea Room",
-        content: "No visit to York is complete without queuing for an opulent afternoon tea at Betty's. It's practically mandatory.",
+        category: "Wildlife",
+        title: "The York Campus Ducks",
+        content: "The University of York campus is famous for its massive population of wildfowl, especially mallard ducks, living around its large central lake. They are an aggressively beloved staple of student life here.",
       }
     ],
-    images: ["https://images.unsplash.com/photo-1549480658-293e506cd0dc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxZb3JrJTIwTWluc3RlcnxlbnwwfHx8fDE3NzI4OTUyNTN8MA&ixlib=rb-4.1.0&q=80&w=1080"],
+    images: ["/york-ducks.png"],
     stories: [
       {
         id: "york-1",
